@@ -2,16 +2,35 @@ import React from 'react';
 import styles from './FileUploader.module.css';
 import { Worker, Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
+import { removeWatermarkFromPDF } from './watermarkRemoval';
 
 interface FilesUploaderProps {
     urls: string[];
     onDrop: (e: React.DragEvent<HTMLDivElement>) => void;
     onDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onDelete: (url: string) => void; // Add onDelete prop
+    onDelete: (url: string) => void;
 }
 
 const FilesUploader: React.FC<FilesUploaderProps> = ({ urls, onDrop, onDragOver, onChange, onDelete }) => {
+    const handleDownload = async (url: string, index: number) => {
+        const response = await fetch(url);
+        const pdfBytes = await response.arrayBuffer();
+        const modifiedPdfBytes = await removeWatermarkFromPDF(pdfBytes);
+
+        const blob = new Blob([modifiedPdfBytes], { type: 'application/pdf' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `document_${index + 1}_noWatermark.pdf`;
+        link.click();
+    };
+
+    const handleDownloadAll = async () => {
+        for (let i = 0; i < urls.length; i++) {
+            await handleDownload(urls[i], i);
+        }
+    };
+
     return (
         <>
             <div
@@ -23,6 +42,13 @@ const FilesUploader: React.FC<FilesUploaderProps> = ({ urls, onDrop, onDragOver,
                 <span>Drag and drop PDFs here, or</span>
                 <label htmlFor="file-input" className="btn btn-primary mx-2">Click to upload</label>
             </div>
+            {urls.length > 0 && (
+                <div className="text-center mb-4">
+                    <button className="btn btn-success" onClick={handleDownloadAll}>
+                        Remove watermark and download all
+                    </button>
+                </div>
+            )}
             <div className="row mt-4">
                 {urls.length > 0 ? (
                     urls.map((url, index) => (
@@ -38,6 +64,12 @@ const FilesUploader: React.FC<FilesUploaderProps> = ({ urls, onDrop, onDragOver,
                                 title="Remove PDF"
                             >
                                 X
+                            </button>
+                            <button
+                                className="btn btn-success w-100 mt-2"
+                                onClick={() => handleDownload(url, index)}
+                            >
+                                Remove watermark and download
                             </button>
                         </div>
                     ))
