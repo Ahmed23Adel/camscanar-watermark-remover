@@ -8,8 +8,8 @@ export const metadata: Metadata = {
   title: "Camscanar Watermark Remover - Remove Watermarks Easily",
   description: "Effortlessly remove watermarks from your Camscanar images. Try our free online watermark remover tool today.",
   keywords: "Camscanar, watermark removal, remove watermarks, PDF watermark remover, free watermark remover",
-  author: "Ahmed Adel",
-  viewport: "width=device-width, initial-scale=1.0"
+  authors: [{ name: "Ahmed Adel", url: "https://github.com/Ahmed23Adel" }],
+  viewport: "width=device-width, initial-scale=1.0",
 };
 
 export default function RootLayout({
@@ -17,14 +17,22 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const authorsContent = Array.isArray(metadata.authors)
+    ? metadata.authors.map(author => `${author.name} (${author.url})`).join(", ")
+    : '';
+  const keywordsContent = typeof metadata.keywords === 'string'
+    ? metadata.keywords
+    : metadata.keywords?.join(', ') || '';
+  const titleContent = typeof metadata.title === 'string' ? metadata.title : '';
+
   return (
     <html lang="en">
       <head>
-        <title>{metadata.title}</title>
-        <meta name="description" content={metadata.description} />
-        <meta name="keywords" content={metadata.keywords} />
-        <meta name="author" content={metadata.author} />
-        <meta name="viewport" content={metadata.viewport} />
+        <title>{titleContent}</title>
+        <meta name="description" content={metadata.description ?? ''} />
+        <meta name="keywords" content={keywordsContent} />
+        <meta name="author" content={authorsContent} />
+        <meta name="viewport" content={typeof metadata.viewport === 'string' ? metadata.viewport : ''} />
         <link rel="icon" href="/logo.ico" type="image/x-icon" />
       </head>
       <body className={inter.className}>{children}</body>
