@@ -1,0 +1,21 @@
+.websiteName{
+    font-size: 48px; 
+    text-align: center;
+    margin: 12px;
+    margin-top: 30px;
+}
+
+.instructions{
+    font-size: 25px;
+    text-align: center;
+    margin-top: 30px;
+}
+.instructionsPdfServer{
+    font-size: 20px;
+    text-align: center;
+    margin-top: 50px;
+
+}
+.socialIcons {
+    z-index: 1000;
+}

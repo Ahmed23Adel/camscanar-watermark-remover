@@ -1,0 +1,25 @@
+.uploadArea {
+    border: 2px dashed rgba(255, 255, 255, 0.5);
+    padding: 20px;
+    cursor: pointer;
+  }
+  
+  .fileInput {
+    display: none;
+  }
+  
+  .pdfViewer {
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    height: 250px;
+    overflow: hidden;
+  }
+  
+  .previewArea {
+    border: 2px dashed rgba(0, 0, 0, 0.3);
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+  }
+  
